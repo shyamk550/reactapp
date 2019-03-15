@@ -1,0 +1,8 @@
+.myImage {
+    background-image: url("/images/spidy.jpg");
+    position: fixed;
+    align-content: center;
+    width: 70%;
+    height: 70%;
+    background-size: cover;
+  }
