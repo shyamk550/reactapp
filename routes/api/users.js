@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -110,33 +110,60 @@ router.post("/login", (req, res) => {
   });
 });
 
-
-router.post('/updateuser', (req, res) =>{
-  console.log(req.body.token);
+router.post("/updateuser", (req, res) => {
   var details = {
-          name: req.body.name,
-          email: req.body.email,
-        };
-      var id ={_id: req.body.id};
-      User.findOneAndUpdate(id , {$set: details}, 
-        function (err, result) {
-          if (err) return next(err);
-          res.send(result+' udpated.');
-      });
-      
+    name: req.body.name,
+    email: req.body.email
+  };
+  var id = { _id: req.body.id };
+  User.findOneAndUpdate(id, { $set: details }, { new: true }, function(
+    err,
+    user
+  ) {
+    if (err) return next(err);
+    // Create JWT Payload
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin
+    };
+    console.log(payload);
+    // Sign token
+    jwt.sign(
+      payload,
+      keys.secretOrKey,
+      {
+        expiresIn: 31556926 // 1 year in seconds
+      },
+      (err, token) => {
+        res.json({
+          success: true,
+          token: "Bearer " + token
+        });
+      }
+    );
   });
+});
 
-router.get('/getusers',(req, res) =>{
-  console.log(req.body.token);
+router.get("/getusers", (req, res) => {
   User.find({}, function(err, result) {
     if (err) throw err;
-    const userws = result.map((result)=>{
-      return {id: result._id, name: result.name, email: result.email}
-  })
+    const userws = result.map(result => {
+      return { id: result._id, name: result.name, email: result.email };
+    });
 
-  res.json(userws)
-
+    res.json(userws);
   });
-})
+});
+
+router.post("/getUsersByName", (req, res) => {
+  User.findOne({ name: req.body.name }).then(user => {
+    if (!user) {
+      return res.status(404).json({ usernotfound: "user not found" });
+    }
+    res.json(user);
+  });
+});
 
 module.exports = router;

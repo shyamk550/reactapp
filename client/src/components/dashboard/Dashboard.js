@@ -2,79 +2,74 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import Users from './Users';
-import '../../App.css';
+import Users from "./Users";
+import MoviesList from "./MoviesList";
+import { Link } from "react-router-dom";
+
+import "../../App.css";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
   }
-  
-  _handleSubmit = (e) => {
+
+  _handleSubmit = e => {
     e.preventDefault();
     console.log(e);
-  }
-  
+  };
+
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
   };
 
-
   render() {
     const { user } = this.props.auth;
-   
-    if(user.isAdmin){
-    return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
-        <div className="row">
-          <div className="landing-copy col s12 center-align">
-            <h4>
-              <b>Hey there,</b> {user.name.split(" ")[0]}
-              {/* <p className="flow-text grey-text text-darken-1">
-                You are logged into a full-stack{" "}
-                <span style={{ fontFamily: "monospace" }}>MERN</span> app 👏
-              </p> */}
-            </h4>
-            {/* <button
-              style={{
-                width: "150px",
-                borderRadius: "3px",
-                letterSpacing: "1.5px",
-                marginTop: "1rem"
-              }}
-              onClick={this.onLogoutClick}
-              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-            >
-              Logout
-            </button> */}
-            <Users/>
-      
+
+    if (user.isAdmin) {
+      return (
+        <div style={{ paddingTop: 50 }} className="container valign-wrapper">
+          <div className="row">
+            <div className="landing-copy col s12 left-align">
+              <Link to="/addmovie" className="waves-effect waves-light btn ">
+                Add Movie{" "}
+              </Link>
+              &nbsp;
+              <Link to="/movieslist" className="waves-effect waves-light btn ">
+                View Movies
+              </Link>
+              &nbsp;
+              <Link to="/users" className="waves-effect waves-light btn ">
+                View Users
+              </Link>
+              <br />
+              <br />
+              <Link to="/editmovie" className="waves-effect waves-light btn ">
+                Search Movie
+              </Link>
+            </div>
           </div>
         </div>
-       
-       
-      </div>
-    );
-          }
-          else{
-            return(
-              <div style={{ height: "75vh" }} className="container valign-wrapper">
-              <div className="row">
-                <div className="landing-copy col s12 center-align">
-                  <h4>
+      );
+    } else {
+      return (
+        <div className="container valign-wrapper">
+          <div className="row">
+            <div className="landing-copy col s12 left-align">
+              {/* <h5>
                     <b>Hey there,</b> {user.name.split(" ")[0]}
-                    <p>Stay tuned... something is coming!!</p>
-                    
-               </h4>
+                                       
+               </h5> */}
+
+              <MoviesList />
+
               {/* <div className="myImage">
                      </div>                  */}
-               </div>
-              </div>
-             
             </div>
-            );
-          }
+          </div>
+        </div>
+      );
+    }
   }
 }
 

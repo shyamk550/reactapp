@@ -2,27 +2,31 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const UserSchema = new Schema({
+const MovieSchema = new Schema({
   name: {
     type: String,
     required: true
   },
-  email: {
+  genre: {
     type: String,
     required: true
   },
-  password: {
-    type: String,
+  rating: {
+    type: Number,
     required: true
   },
-  isAdmin: {
-    type: Boolean,
+  story:{
+    type:String,
     default: false
   },
-  date: {
+  cast: {
+    type: String,
+    default: Date.now
+  },
+  releasedate: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = Movies = mongoose.model("movies", MovieSchema);
