@@ -11,7 +11,7 @@ const app = express();
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: false,
   })
 );
 app.use(bodyParser.json());
@@ -22,8 +22,8 @@ const db = require("./config/keys").mongoURI;
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB successfully connected"))
-  .catch(err => console.log(err));
-
+  .catch((err) => console.log(err));
+debugger;
 // Passport middleware
 app.use(passport.initialize());
 
